@@ -1,0 +1,347 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Comic Craft - Create Your Comic</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f3efff;
+            color: #241b3d;
+        }
+
+        header {
+            background: #241b3d;
+            color: white;
+            padding: 25px;
+            text-align: center;
+            border-bottom: 5px solid #ffcc4d;
+        }
+
+        header h1 {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+
+        main {
+            max-width: 1000px;
+            margin: 25px auto;
+            padding: 20px;
+        }
+
+        .intro {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .editor, .comic-area {
+            background: white;
+            padding: 22px;
+            margin-bottom: 25px;
+            border-radius: 14px;
+            box-shadow: 0 4px 15px #00000010;
+        }
+
+        h2 {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin: 12px 0 6px;
+            font-weight: bold;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #c9c1e0;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        textarea {
+            height: 90px;
+            resize: vertical;
+        }
+
+        button {
+            background: #7552d9;
+            color: white;
+            padding: 12px 16px;
+            border: none;
+            border-radius: 8px;
+            margin: 12px 5px 0 0;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #5836b5;
+        }
+
+        .clear-btn {
+            background: #d94358;
+        }
+
+        .comic-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .panel {
+            background: #ffe08a;
+            border: 4px solid #241b3d;
+            padding: 18px;
+            min-height: 240px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            overflow-wrap: anywhere;
+        }
+
+        .panel-number {
+            align-self: flex-start;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .bubble {
+            background: white;
+            border: 2px solid #241b3d;
+            border-radius: 20px;
+            padding: 12px;
+            margin: 12px 0;
+            max-width: 100%;
+        }
+
+        .hero {
+            font-size: 60px;
+            margin: 8px;
+        }
+
+        .delete-btn {
+            background: #d94358;
+            font-size: 12px;
+        }
+
+        footer {
+            background: #241b3d;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        @media (max-width: 600px) {
+            header h1 {
+                font-size: 28px;
+            }
+
+            .comic-grid {
+                grid-template-columns: 1fr;
+            }
+
+            button {
+                margin: 8px 3px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>🎨 Comic Craft</h1>
+        <p>Create Your Own Amazing Comic Story!</p>
+    </header>
+
+    <main>
+        <section class="intro">
+            <h2>Welcome to Comic Craft!</h2>
+            <p>Imagine it. Create it. Share your story.</p>
+        </section>
+
+        <section class="editor">
+            <h2>✏️ Comic Editor</h2>
+
+            <label for="title">Comic Title</label>
+            <input id="title" type="text"
+                   value="My Superhero Adventure">
+
+            <label for="character">Character Name</label>
+            <input id="character" type="text"
+                   placeholder="Enter character name">
+
+            <label for="dialogue">Character Dialogue</label>
+            <textarea id="dialogue"
+                      placeholder="Write your story dialogue..."></textarea>
+
+            <label for="emoji">Choose Character</label>
+            <select id="emoji">
+                <option value="🦸">Superhero</option>
+                <option value="🦹">Supervillain</option>
+                <option value="🧙">Wizard</option>
+                <option value="🧑‍🚀">Astronaut</option>
+                <option value="🐱">Cat</option>
+                <option value="🐉">Dragon</option>
+            </select>
+
+            <label for="color">Choose Panel Color</label>
+            <select id="color">
+                <option value="#ffe08a">Yellow</option>
+                <option value="#a8e6cf">Green</option>
+                <option value="#a8d8ea">Blue</option>
+                <option value="#ffaaa5">Pink</option>
+                <option value="#d5b8ff">Purple</option>
+            </select>
+
+            <button onclick="addPanel()">➕ Add Comic Panel</button>
+            <button onclick="downloadComic()">⬇ Download Comic</button>
+            <button class="clear-btn" onclick="clearComic()">
+                🗑 Clear Comic
+            </button>
+        </section>
+
+        <section class="comic-area">
+            <h2 id="comicTitle">My Superhero Adventure</h2>
+            <div class="comic-grid" id="comicGrid">
+                <article class="panel">
+                    <span class="panel-number">PANEL 1</span>
+                    <div class="bubble">The adventure begins!</div>
+                    <div class="hero">🦸</div>
+                    <h3>Superhero</h3>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>❤️ Created with Comic Craft</p>
+        <p>Let your imagination become a story!</p>
+    </footer>
+
+    <script>
+        const titleInput = document.getElementById("title");
+        const comicTitle = document.getElementById("comicTitle");
+        const comicGrid = document.getElementById("comicGrid");
+
+        titleInput.addEventListener("input", function () {
+            comicTitle.textContent =
+                titleInput.value.trim() || "My Comic";
+        });
+
+        function addPanel() {
+            const character =
+                document.getElementById("character").value.trim();
+
+            const dialogue =
+                document.getElementById("dialogue").value.trim();
+
+            const emoji =
+                document.getElementById("emoji").value;
+
+            const color =
+                document.getElementById("color").value;
+
+            const panel = document.createElement("article");
+            panel.className = "panel";
+            panel.style.backgroundColor = color;
+
+            const number = document.createElement("span");
+            number.className = "panel-number";
+            number.textContent =
+                "PANEL " + (comicGrid.children.length + 1);
+
+            const bubble = document.createElement("div");
+            bubble.className = "bubble";
+            bubble.textContent =
+                dialogue || "A new adventure begins!";
+
+            const hero = document.createElement("div");
+            hero.className = "hero";
+            hero.textContent = emoji;
+
+            const name = document.createElement("h3");
+            name.textContent = character || "My Character";
+
+            const deleteBtn = document.createElement("button");
+            deleteBtn.className = "delete-btn";
+            deleteBtn.textContent = "Delete Panel";
+
+            deleteBtn.onclick = function () {
+                panel.remove();
+                updateNumbers();
+            };
+
+            panel.append(number, bubble, hero, name, deleteBtn);
+            comicGrid.appendChild(panel);
+
+            document.getElementById("character").value = "";
+            document.getElementById("dialogue").value = "";
+        }
+
+        function updateNumbers() {
+            const panels = comicGrid.querySelectorAll(".panel");
+
+            panels.forEach(function (panel, index) {
+                panel.querySelector(".panel-number").textContent =
+                    "PANEL " + (index + 1);
+            });
+        }
+
+        function clearComic() {
+            if (confirm("Do you want to clear all comic panels?")) {
+                comicGrid.replaceChildren();
+            }
+        }
+
+        async function downloadComic() {
+            if (comicGrid.children.length === 0) {
+                alert("Please create at least one comic panel!");
+                return;
+            }
+
+            try {
+                if (typeof html2canvas === "undefined") {
+                    await new Promise((resolve, reject) => {
+                        const script = document.createElement("script");
+                        script.src =
+                            "https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js";
+                        script.onload = resolve;
+                        script.onerror = reject;
+                        document.head.appendChild(script);
+                    });
+                }
+
+                const canvas = await html2canvas(comicGrid, {
+                    backgroundColor: "#ffffff",
+                    scale: 2
+                });
+
+                const link = document.createElement("a");
+                link.download =
+                    (titleInput.value.trim() || "my-comic") + ".png";
+                link.href = canvas.toDataURL("image/png");
+                link.click();
+
+            } catch (error) {
+                alert("Download failed. Please check your internet connection.");
+            }
+        }
+    </script>
+
+</body>
+</html>
